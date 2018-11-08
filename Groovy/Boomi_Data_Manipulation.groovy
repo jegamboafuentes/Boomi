@@ -7,6 +7,9 @@ logger = ExecutionUtil.getBaseLogger();
 //logger.info(" text ");
 String LINE_SEPARATOR = System.getProperty("line.separator");
 
+String dataModified = "";
+String newOutput = "";
+
 for( int i = 0; i < dataContext.getDataCount(); i++ ) {
 
    InputStream is = dataContext.getStream(i);
@@ -25,14 +28,23 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
       
       for (i=0;i<=(numberOfRows-3);i++){//Don't change the 3 and 1 values, last three "rows" and first "row" are data garbage and the number 
         def currentRow = rows[i];
-        logger.info(" TEST, getting values from column, column 1 ");
+        //logger.info(" TEST, getting values from column, column "+i+": "+rows[i]);
         def currentData = getData(currentRow);
           for(j=0;j<(currentData.size());j++){ //Data inside the row (Columns) dont change the value 1, last element of row is datagarbage
               // --------- Logic here
-              logger.info("Data: " + currentData.get(j));
+              //logger.info("Data: " + currentData.get(j));
               // --------- End Logic
           }
+          if(i==0){ //Waranty do not add # in the first row 
+              dataModified = dataModified +"|"+ currentData.join("|^|");
+          }else{
+              dataModified = dataModified + "|#|" + currentData.join("|^|");
+          }
       }
+      
+      newOutput = createOutput(line,dataModified);
+      logger.info(newOutput);
+      
     
     
       
@@ -69,4 +81,15 @@ def getData(rowOfData){
           }
       }
       return cleanedColumn;
+}
+
+def createOutput(bulkData,newData){
+    String functionOutput;
+    String [] rows;
+    rows = bulkData.split("#");
+    int numberOfRowsInBulkData = rows.size();
+    String [] firstPartOfOutputArray = rows[0].split("@");
+    String firstPartOfOutput = firstPartOfOutputArray[0]+"@"+firstPartOfOutputArray[1]+"@"+firstPartOfOutputArray[2]+"@";
+    functionOutput = firstPartOfOutput+newData+"|#"+rows[(numberOfRowsInBulkData-2)]+"#"+rows[(numberOfRowsInBulkData-1)];
+    return functionOutput;
 }
