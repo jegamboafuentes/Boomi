@@ -28,12 +28,27 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
       
       for (i=0;i<=(numberOfRows-3);i++){//Don't change the 3 and 1 values, last three "rows" and first "row" are data garbage and the number 
         def currentRow = rows[i];
-        //logger.info(" TEST, getting values from column, column "+i+": "+rows[i]);
         def currentData = getData(currentRow);
+        // --------- Logic for rows here
+              
+              
+            //logger.info(" TEST, getting values from column, column "+i+": "+rows[i]);
+            //Add new variable
+            //currentData.push('Hola, I am a new Variable');
+              
+              
+        // --------- End rows Logic
           for(j=0;j<(currentData.size());j++){ //Data inside the row (Columns) dont change the value 1, last element of row is datagarbage
-              // --------- Logic here
+              // --------- Logic for data here
+              
+              
               //logger.info("Data: " + currentData.get(j));
-              // --------- End Logic
+              // Modify data
+              //currentData[1] = "I modified the current value";
+              
+
+              
+              // --------- End data Logic
           }
           if(i==0){ //Waranty do not add # in the first row 
               dataModified = dataModified +"|"+ currentData.join("|^|");
@@ -44,7 +59,7 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
       
       newOutput = createOutput(line,dataModified);
       logger.info(newOutput);
-      
+      line = newOutput;
     
     
       
@@ -89,7 +104,7 @@ def createOutput(bulkData,newData){
     rows = bulkData.split("#");
     int numberOfRowsInBulkData = rows.size();
     String [] firstPartOfOutputArray = rows[0].split("@");
-    String firstPartOfOutput = firstPartOfOutputArray[0]+"@"+firstPartOfOutputArray[1]+"@"+firstPartOfOutputArray[2]+"@";
-    functionOutput = firstPartOfOutput+newData+"|#"+rows[(numberOfRowsInBulkData-2)]+"#"+rows[(numberOfRowsInBulkData-1)];
+    String firstPartOfOutput = firstPartOfOutputArray[0]+"@"+firstPartOfOutputArray[1]+"@"+firstPartOfOutputArray[2]+"@"; //Don't change this
+    functionOutput = firstPartOfOutput+newData+"|#"+rows[(numberOfRowsInBulkData-2)]+"#"+rows[(numberOfRowsInBulkData-1)]; //Don't change this
     return functionOutput;
 }
